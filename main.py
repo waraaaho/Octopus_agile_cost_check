@@ -8,17 +8,11 @@ try:
     response = get("https://api.octopus.energy/v1/products/AGILE-FLEX-22-11-25/electricity-tariffs/E-1R-AGILE-FLEX-22-11-25-G/standard-unit-rates/", auth=("sk_live_DWM2zh5uWkwARd21TUB9lpDW", ""),)
 except:
     print("Not able to retrieve data from Octopus Energy")
-#print(response.text)#,response.text and header are useful)
 text = json.loads(response.text)
 today = datetime.today()
 for i, result in enumerate(text['results']):
     # get data from today and tmr
     if datetime.now().date() > datetime.strptime(result['valid_from'], '%Y-%m-%dT%H:%M:%SZ').date(): break
-    # value_inc_vat = result['value_inc_vat']
-    # valid_from = result['valid_from']
-    # valid_from = datetime.strptime(valid_from, '%Y-%m-%dT%H:%M:%SZ')
-    # valid_to = result['valid_to']
-    # valid_to = (datetime.strptime(valid_to, '%Y-%m-%dT%H:%M:%SZ'))
 
 if i<48:
     today_tariff = pd.DataFrame(text['results'][:i])[::-1]
@@ -37,7 +31,6 @@ ax.set_xlabel("Time")
 ax.set_xticklabels(x_labels,rotation=0)
 
 plt.savefig(f"{today.strftime('%Y-%m-%d %H:%M:%S')}.jpeg")
-#sendwhatmsg_to_group(message=today_tariff)
 if (today_tariff['value_inc_vat'] < 0).any():
     announce = "*Cashback Time*\n"
 else:
