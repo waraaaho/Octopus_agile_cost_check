@@ -1,3 +1,6 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
 def plot(today, text)
     if i<48:
         today_tariff = pd.DataFrame(text['results'][:i])[::-1]
